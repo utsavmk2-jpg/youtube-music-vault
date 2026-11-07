@@ -398,17 +398,20 @@ def delete_song(song_id):
 def stream_audio(song_id):
     filename = f"{song_id}.mp3"
     filepath = os.path.join(DOWNLOADS_DIR, filename)
-    if not os.path.exists(filepath):
-        # Look up in db
+    if not (os.path.exists(filepath) and os.path.isfile(filepath)):
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT filename FROM songs WHERE id = ?", (song_id,))
         row = cursor.fetchone()
         conn.close()
-        if row and os.path.exists(os.path.join(DOWNLOADS_DIR, row["filename"])):
-            filepath = os.path.join(DOWNLOADS_DIR, row["filename"])
+        if row and row["filename"]:
+            custom_path = os.path.join(DOWNLOADS_DIR, row["filename"])
+            if os.path.exists(custom_path) and os.path.isfile(custom_path):
+                filepath = custom_path
+            else:
+                abort(404, description="Audio file not on disk")
         else:
-            abort(404, description="Audio file not found")
+            abort(404, description="Audio file not on disk")
 
     return send_file(
         filepath,
@@ -431,14 +434,13 @@ def download_audio(song_id):
     filename = row["filename"]
     if filename:
         filepath = os.path.join(DOWNLOADS_DIR, filename)
-        if os.path.exists(filepath):
+        if os.path.exists(filepath) and os.path.isfile(filepath):
             download_title = sanitize_filename(row["title"]) or row["id"]
-            download_filename = f"{download_title}.mp3"
             return send_file(
                 filepath,
                 mimetype="audio/mpeg",
                 as_attachment=True,
-                download_name=download_filename
+                download_name=f"{download_title}.mp3"
             )
 
     # Cloud fallback: redirect to high-speed public MP3 downloader

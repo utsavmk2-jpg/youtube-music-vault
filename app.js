@@ -267,8 +267,12 @@ function setupAudioListeners() {
   });
 
   audio.addEventListener('error', (e) => {
-    console.warn("Audio playback error, falling back to YouTube Player if available:", e);
+    console.warn("Audio playback error, falling back to YouTube Player:", e);
     visualizerOverlay.classList.remove('active');
+    if (state.currentSong) {
+      openVideoModal(state.currentSong);
+      showToast(`Playing "${state.currentSong.title}" via YouTube Player`, 'info');
+    }
   });
 }
 
@@ -625,13 +629,34 @@ function hideProgress() {
 async function loadSavedSongs() {
   try {
     const res = await fetch('/api/songs');
-    if (!res.ok) return;
+    if (!res.ok) throw new Error('API failed');
     const songs = await res.json();
-    state.savedSongs = songs;
-    state.filteredSongs = songs;
+    if (songs && songs.length > 0) {
+      state.savedSongs = songs;
+      state.filteredSongs = songs;
+      localStorage.setItem('yt_vault_saved_songs', JSON.stringify(songs));
+    } else {
+      // Restore from device localStorage if cloud server restarted
+      const cached = localStorage.getItem('yt_vault_saved_songs');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed.length > 0) {
+          state.savedSongs = parsed;
+          state.filteredSongs = parsed;
+        }
+      }
+    }
     renderLibrary();
   } catch (err) {
-    console.error('Failed to load songs:', err);
+    console.warn('Failed to load songs from server, checking device storage:', err);
+    const cached = localStorage.getItem('yt_vault_saved_songs');
+    if (cached) {
+      try {
+        state.savedSongs = JSON.parse(cached);
+        state.filteredSongs = state.savedSongs;
+        renderLibrary();
+      } catch (e) {}
+    }
   }
 }
 
