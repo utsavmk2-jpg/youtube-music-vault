@@ -14,6 +14,32 @@ DOWNLOADS_DIR = os.path.join(BASE_DIR, "downloads")
 DB_PATH = os.path.join(BASE_DIR, "database.db")
 os.makedirs(DOWNLOADS_DIR, exist_ok=True)
 
+# Auto-organize files if uploaded directly to root
+import shutil
+templates_dir = os.path.join(BASE_DIR, "templates")
+if not os.path.exists(os.path.join(templates_dir, "index.html")) and os.path.exists(os.path.join(BASE_DIR, "index.html")):
+    os.makedirs(templates_dir, exist_ok=True)
+    try:
+        shutil.copy2(os.path.join(BASE_DIR, "index.html"), os.path.join(templates_dir, "index.html"))
+    except Exception:
+        pass
+
+static_css_dir = os.path.join(BASE_DIR, "static", "css")
+if not os.path.exists(os.path.join(static_css_dir, "style.css")) and os.path.exists(os.path.join(BASE_DIR, "style.css")):
+    os.makedirs(static_css_dir, exist_ok=True)
+    try:
+        shutil.copy2(os.path.join(BASE_DIR, "style.css"), os.path.join(static_css_dir, "style.css"))
+    except Exception:
+        pass
+
+static_js_dir = os.path.join(BASE_DIR, "static", "js")
+if not os.path.exists(os.path.join(static_js_dir, "app.js")) and os.path.exists(os.path.join(BASE_DIR, "app.js")):
+    os.makedirs(static_js_dir, exist_ok=True)
+    try:
+        shutil.copy2(os.path.join(BASE_DIR, "app.js"), os.path.join(static_js_dir, "app.js"))
+    except Exception:
+        pass
+
 try:
     FFMPEG_PATH = imageio_ffmpeg.get_ffmpeg_exe()
 except Exception:
@@ -79,7 +105,29 @@ def sanitize_filename(filename: str) -> str:
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    if os.path.exists(os.path.join(BASE_DIR, "templates", "index.html")):
+        return render_template("index.html")
+    if os.path.exists(os.path.join(BASE_DIR, "index.html")):
+        return send_file(os.path.join(BASE_DIR, "index.html"), mimetype="text/html")
+    return "YouTube Music Vault Server Running!", 200
+
+@app.route("/static/css/style.css")
+@app.route("/style.css")
+def serve_css():
+    if os.path.exists(os.path.join(BASE_DIR, "static", "css", "style.css")):
+        return send_file(os.path.join(BASE_DIR, "static", "css", "style.css"), mimetype="text/css")
+    if os.path.exists(os.path.join(BASE_DIR, "style.css")):
+        return send_file(os.path.join(BASE_DIR, "style.css"), mimetype="text/css")
+    abort(404)
+
+@app.route("/static/js/app.js")
+@app.route("/app.js")
+def serve_js():
+    if os.path.exists(os.path.join(BASE_DIR, "static", "js", "app.js")):
+        return send_file(os.path.join(BASE_DIR, "static", "js", "app.js"), mimetype="application/javascript")
+    if os.path.exists(os.path.join(BASE_DIR, "app.js")):
+        return send_file(os.path.join(BASE_DIR, "app.js"), mimetype="application/javascript")
+    abort(404)
 
 @app.route("/api/host-info", methods=["GET"])
 def get_host_info():
