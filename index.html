@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0c">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>YouTube Music Vault - Stream, Convert & Download</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+      <div class="nav-left">
+        <div class="brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+          </div>
+          <span class="brand-title">YT <span>Music Vault</span></span>
+        </div>
+      </div>
+
+      <!-- Quick Search / Link Input Bar -->
+      <div class="nav-center">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+          <input type="text" id="headerUrlInput" placeholder="Paste YouTube link (e.g. https://www.youtube.com/watch?v=...)">
+          <button id="headerPasteBtn" class="icon-btn-subtle" title="Paste from clipboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+          </button>
+          <button id="headerConvertBtn" class="primary-btn">
+            <span>Convert & Save</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <button id="mobileQrBtn" class="mobile-host-btn" title="Open on Mobile / Phone">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          <span>📱 Phone Link</span>
+        </button>
+        <a href="#library-section" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <span>Library (<span id="navSongCount">0</span>)</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="main-content">
+      <!-- Converter & Preview Hero Section -->
+      <section class="hero-converter-card">
+        <div class="hero-header">
+          <h2>Convert YouTube Videos to Downloadable Songs</h2>
+          <p>Extract high quality audio, save it directly to your permanent website library, and listen or download anytime.</p>
+        </div>
+
+        <div class="converter-form">
+          <div class="input-group">
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21.58 7.19a2.51 2.51 0 0 0-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42a2.51 2.51 0 0 0 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/>
+              </svg>
+            </div>
+            <input type="text" id="heroUrlInput" placeholder="Paste YouTube link here (Watch, Shorts, Music, or youtu.be)...">
+            <button id="heroPasteBtn" class="btn-secondary" title="Paste Clipboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+              <span>Paste</span>
+            </button>
+            <button id="fetchBtn" class="btn-secondary">
+              <span>Preview</span>
+            </button>
+            <button id="convertBtn" class="btn-accent">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Convert to MP3 & Save</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Conversion Progress / Status Bar -->
+        <div id="progressContainer" class="progress-container hidden">
+          <div class="progress-bar-wrapper">
+            <div id="progressBar" class="progress-bar-fill indeterminate"></div>
+          </div>
+          <div class="progress-info">
+            <span id="progressText" class="progress-status-text">Fetching video information from YouTube...</span>
+            <span id="progressPercent" class="progress-percentage">Processing</span>
+          </div>
+        </div>
+
+        <!-- Video Preview Card (Shows upon preview or before convert) -->
+        <div id="previewCard" class="preview-card hidden">
+          <div class="preview-thumbnail-wrap">
+            <img id="previewThumb" src="" alt="Thumbnail">
+            <span id="previewDuration" class="time-badge">00:00</span>
+            <button id="previewPlayBtn" class="overlay-play-btn" title="Stream Preview">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+          </div>
+          <div class="preview-details">
+            <h3 id="previewTitle">Video Title</h3>
+            <p id="previewChannel" class="preview-channel">Channel Name</p>
+            <div class="preview-actions">
+              <button id="previewSaveBtn" class="btn-accent">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Download & Save to Website</span>
+              </button>
+              <button id="previewWatchBtn" class="btn-secondary">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                <span>Watch YouTube Video</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Sample / Trending Links -->
+        <div class="quick-samples-wrapper">
+          <div class="quick-samples-header">
+            <span>⚡ Quick Try (Royalty Free & Popular Tracks):</span>
+          </div>
+          <div id="quickSamplesList" class="quick-samples-chips">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Saved Library Section -->
+      <section id="library-section" class="library-section">
+        <div class="library-header">
+          <div class="library-title-group">
+            <h2>Your Saved Music Library</h2>
+            <span class="badge" id="libraryCountBadge">0 Songs</span>
+          </div>
+          
+          <div class="library-controls">
+            <!-- Search in saved songs -->
+            <div class="library-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="librarySearchInput" placeholder="Filter saved songs...">
+            </div>
+            <!-- View Mode Toggle -->
+            <div class="view-toggle">
+              <button id="viewGridBtn" class="active" title="Grid View">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              </button>
+              <button id="viewListBtn" title="List View">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyLibrary" class="empty-library">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 18V5l12-2v13"/>
+              <circle cx="6" cy="18" r="3"/>
+              <circle cx="18" cy="16" r="3"/>
+            </svg>
+          </div>
+          <h3>Your Library is Empty</h3>
+          <p>Paste any YouTube link above or click one of the quick try tracks to convert and save it here!</p>
+        </div>
+
+        <!-- Songs Grid View -->
+        <div id="songsGrid" class="songs-grid hidden">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Songs List View -->
+        <div id="songsList" class="songs-list-table hidden">
+          <table class="songs-table">
+            <thead>
+              <tr>
+                <th width="40">#</th>
+                <th width="70">Cover</th>
+                <th>Title & Channel</th>
+                <th width="100">Duration</th>
+                <th width="110">Added</th>
+                <th width="180" class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="songsTableBody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- YouTuber Video Modal / Cinema Viewer -->
+      <div id="videoModal" class="video-modal hidden">
+        <div class="modal-backdrop" id="modalBackdrop"></div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-title-wrap">
+              <span class="live-pill">YouTube Cinema View</span>
+              <h4 id="modalVideoTitle">Video Player</h4>
+            </div>
+            <button id="modalCloseBtn" class="close-btn" title="Close Video">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="video-container">
+            <div id="youtubePlayerPlaceholder"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile QR Code Modal -->
+      <div id="qrModal" class="video-modal hidden">
+        <div class="modal-backdrop" id="qrModalBackdrop"></div>
+        <div class="modal-content qr-modal-content">
+          <div class="modal-header">
+            <div class="modal-title-wrap">
+              <span class="live-pill" style="background: #10b981;">Mobile Host</span>
+              <h4>Connect from your Phone</h4>
+            </div>
+            <button id="qrModalCloseBtn" class="close-btn" title="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="qr-modal-body">
+            <div class="qr-code-wrapper">
+              <img id="qrImage" src="" alt="Mobile QR Code">
+            </div>
+            <div class="qr-details">
+              <p class="qr-instruction">Scan this QR code with your phone camera or visit this URL in your mobile browser:</p>
+              <div class="qr-link-box">
+                <input type="text" id="mobileLinkInput" readonly value="http://172.27.131.115:5000">
+                <button id="copyMobileLinkBtn" class="btn-accent">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+              <div class="qr-tips">
+                <span>💡 <strong>Tip:</strong> Ensure your phone is connected to the same Wi-Fi network as this PC.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Persistent Music Player Bar (YouTube Music / Spotify Style) -->
+    <footer class="player-bar">
+      <!-- Left: Currently Playing Info -->
+      <div class="player-left">
+        <div class="now-playing-cover" id="playerCoverWrap">
+          <img id="playerCover" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23333'%3E%3Crect width='24' height='24'/%3E%3C/svg%3E" alt="Cover">
+          <div class="visualizer-overlay" id="visualizerOverlay">
+            <div class="eq-bar bar-1"></div>
+            <div class="eq-bar bar-2"></div>
+            <div class="eq-bar bar-3"></div>
+          </div>
+        </div>
+        <div class="now-playing-info">
+          <div id="playerTitle" class="track-title">No song playing</div>
+          <div id="playerChannel" class="track-channel">Choose a song from your library</div>
+        </div>
+        <button id="playerSaveCurrentBtn" class="icon-btn hidden" title="Save this song">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+
+      <!-- Center: Main Playback Controls & Seekbar -->
+      <div class="player-center">
+        <div class="player-controls">
+          <button id="shuffleBtn" class="control-btn" title="Shuffle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+          </button>
+          <button id="prevBtn" class="control-btn" title="Previous Track">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg>
+          </button>
+          <button id="skipBack10Btn" class="control-btn small" title="Skip -10s">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          </button>
+          <button id="playPauseBtn" class="control-btn play-circle" title="Play">
+            <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <svg id="pauseIcon" class="hidden" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </button>
+          <button id="skipFwd10Btn" class="control-btn small" title="Skip +10s">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <button id="nextBtn" class="control-btn" title="Next Track">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>
+          </button>
+          <button id="loopBtn" class="control-btn" title="Repeat Track">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          </button>
+        </div>
+
+        <div class="player-progress-row">
+          <span id="currentTime" class="time-label">00:00</span>
+          <div class="seek-bar-container" id="seekBarContainer">
+            <div id="seekProgress" class="seek-progress"></div>
+            <input type="range" id="seekSlider" min="0" max="100" value="0" step="0.1">
+          </div>
+          <span id="totalDuration" class="time-label">00:00</span>
+        </div>
+      </div>
+
+      <!-- Right: Video Mode & Download Direct & Volume -->
+      <div class="player-right">
+        <!-- Mobile Mini Controls -->
+        <div class="mobile-mini-controls">
+          <button id="mobilePlayPauseBtn" class="control-btn play-circle" title="Play/Pause">
+            <svg id="mobilePlayIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <svg id="mobilePauseIcon" class="hidden" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </button>
+          <button id="mobileNextBtn" class="control-btn" title="Next Track">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>
+          </button>
+        </div>
+
+        <!-- Watch Video Button -->
+        <button id="watchVideoBtn" class="player-extra-btn" title="Watch YouTube Video Mode">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>Video</span>
+        </button>
+
+        <!-- Direct Download MP3 Button -->
+        <button id="directDownloadBtn" class="player-extra-btn highlight" title="Download MP3 file to your computer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Download MP3</span>
+        </button>
+
+        <!-- Volume Controller -->
+        <div class="volume-container">
+          <button id="muteBtn" class="control-btn" title="Mute/Unmute">
+            <svg id="volHighIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            <svg id="volMuteIcon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          </button>
+          <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.8">
+        </div>
+      </div>
+    </footer>
+
+    <!-- Native Audio Element -->
+    <audio id="audioElement" preload="auto"></audio>
+
+    <!-- Toast Notifications Hub -->
+    <div id="toastContainer" class="toast-container"></div>
+  </div>
+
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <!-- Main Application Logic -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
