@@ -289,14 +289,22 @@ function playSong(song) {
   seekProgress.style.width = '0%';
   seekSlider.value = 0;
 
+  // If cloud-streamed track, launch YouTube Player directly with zero bot blocks!
+  if (!song.filename || song.duration === 'Streamable') {
+    openVideoModal(song);
+    showToast(`Streaming "${song.title}" via YouTube Player`, 'info');
+    return;
+  }
+
   // Set audio source to stream endpoint
   audio.src = `/stream/${song.id}`;
   audio.play().then(() => {
     state.isPlaying = true;
     showToast(`Now playing: ${song.title}`, 'info');
   }).catch(err => {
-    console.error("Playback failed:", err);
-    showToast("Starting audio stream...", "info");
+    console.warn("Audio playback failed, opening YouTube Player:", err);
+    openVideoModal(song);
+    showToast(`Streaming "${song.title}" via YouTube Player`, 'info');
   });
 }
 
